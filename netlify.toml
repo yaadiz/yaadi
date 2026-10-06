@@ -1,3 +1,0 @@
-# Netlify deploys the shorts-shop folder as-is; there is no build step.
-[build]
-  publish = "shorts-shop"
