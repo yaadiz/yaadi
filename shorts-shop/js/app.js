@@ -105,18 +105,13 @@
 
     const c = shop.contact;
     $("[data-contact]").innerHTML = [
-      `<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>`,
+      c.email ? `<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>` : "",
       c.whatsapp ? `<a href="https://wa.me/${esc(c.whatsapp)}" target="_blank" rel="noopener">WhatsApp</a>` : "",
       c.instagram ? `<a href="https://instagram.com/${esc(c.instagram)}" target="_blank" rel="noopener">@${esc(c.instagram)}</a>` : "",
     ].join("");
 
-    const emailLink = $("[data-contact-email]");
-    emailLink.href = `mailto:${c.email}`;
-    emailLink.textContent = c.email;
-
     $("[data-shipping-price]").textContent = fmt(d.shippingPrice);
     $("[data-collection-option]").hidden = !d.collection;
-    $("[data-whatsapp-submit]").hidden = !c.whatsapp;
   }
 
   // ---------- Bag state ----------
@@ -307,28 +302,16 @@
   const form = $("[data-checkout]");
   form.addEventListener("change", (e) => { if (e.target.name === "delivery") renderBag(); });
 
-  function orderMessage(data) {
-    const shipping = data.delivery === "shipping";
-    const lines = bagLines().map(({ p, qty }) =>
-      `- ${p.name}, ${p.colour}, size ${p.size} x${qty}: ${fmt(p.price * qty)}`);
+  // Sent with the form so the order shows up in full in Netlify and in your notification email.
+  function orderSummary() {
+    const shipping = deliveryMethod() === "shipping";
     return [
-      `New order from the ${shop.name} shop`,
-      "",
-      ...lines,
-      "",
-      `Subtotal: ${fmt(subtotal())}`,
+      ...bagLines().map(({ p, qty }) => `${p.name}, ${p.colour}, size ${p.size} x${qty}: ${fmt(p.price * qty)}`),
       `Delivery (${shipping ? "tracked delivery" : "local collection"}): ${shipping ? fmt(deliveryCost()) : "Free"}`,
-      `Total: ${fmt(subtotal() + deliveryCost())}`,
-      "",
-      `Name: ${data.name}`,
-      `Email: ${data.email}`,
-      data.phone ? `Phone: ${data.phone}` : null,
-      shipping ? `Address:\n${data.address}` : null,
-      data.note ? `Note: ${data.note}` : null,
-    ].filter((line) => line !== null).join("\n");
+    ].join("\n");
   }
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const error = $("[data-form-error]");
     const invalid = $$("input, textarea", form).find((el) => !el.closest("[hidden]") && !el.checkValidity());
@@ -343,19 +326,28 @@
     error.textContent = "";
     form.classList.remove("show-errors");
 
-    const data = Object.fromEntries(new FormData(form));
-    Object.keys(data).forEach((k) => { data[k] = String(data[k]).trim(); });
-    const message = orderMessage(data);
-    const via = e.submitter && e.submitter.value === "whatsapp" ? "whatsapp" : "email";
+    form.elements.order.value = orderSummary();
+    form.elements.total.value = fmt(subtotal() + deliveryCost());
 
-    if (via === "whatsapp") {
-      window.open(`https://wa.me/${shop.contact.whatsapp}?text=${encodeURIComponent(message)}`, "_blank", "noopener");
-    } else {
-      const subject = `Order: ${bagLines().map(({ p }) => `${p.name} (${p.colour}, ${p.size})`).join(", ")}`;
-      window.location.href = `mailto:${shop.contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message.replace(/\n/g, "\r\n"))}`;
+    const button = $("[data-submit]");
+    button.disabled = true;
+    button.textContent = "Sending\u2026";
+    try {
+      // Netlify Forms picks up the submission; see README for setup.
+      const res = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(new FormData(form)).toString(),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      showView("done");
+      $("[data-finish]").focus();
+    } catch (err) {
+      error.textContent = "Your order couldn't be sent. Please check your connection and try again.";
+    } finally {
+      button.disabled = false;
+      button.textContent = "Place order";
     }
-    showView("done");
-    $("[data-finish]").focus();
   });
 
   renderStatic();

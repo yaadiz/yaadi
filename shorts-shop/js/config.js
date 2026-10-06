@@ -8,10 +8,10 @@ window.SHOP = {
   currency: "GBP",
   locale: "en-GB",
 
-  // Orders are sent to you as a pre-filled email (and WhatsApp message, if you add a number).
+  // Orders arrive through Netlify Forms (see README). These are optional links shown in the footer.
   contact: {
-    email: "you@example.com",
-    whatsapp: "", // international format, digits only, e.g. "447700900123"
+    email: "", // e.g. "you@example.com"
+    whatsapp: "", // international format, digits only, e.g. "31612345678"
     instagram: "", // handle without the @
   },
 

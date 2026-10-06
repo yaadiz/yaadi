@@ -93,7 +93,12 @@
       <div data-bag-items></div>
       <p class="bag-empty muted" data-bag-empty>Your bag is empty.</p>
 
-      <form class="checkout" data-checkout novalidate>
+      <form class="checkout" name="order" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-checkout novalidate>
+        <input type="hidden" name="form-name" value="order">
+        <input type="hidden" name="order">
+        <input type="hidden" name="total">
+        <p hidden><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+
         <fieldset class="delivery-choice">
           <legend>Delivery</legend>
           <label class="radio">
@@ -135,17 +140,15 @@
 
         <p class="form-error" data-form-error role="alert"></p>
 
-        <button class="btn btn-primary btn-block" type="submit" value="email">Send order by email</button>
-        <button class="btn btn-secondary btn-block" type="submit" value="whatsapp" data-whatsapp-submit hidden>Send order on WhatsApp</button>
-        <p class="muted small">No payment is taken here. I'll reply to confirm and send payment details.</p>
+        <button class="btn btn-primary btn-block" type="submit" data-submit>Place order</button>
+        <p class="muted small">No payment is taken here. I'll email you to confirm and send payment details.</p>
       </form>
     </div>
 
     <div class="bag-body bag-done" data-bag-view="done" hidden>
       <p class="done-mark" aria-hidden="true">&check;</p>
-      <h3>Almost there</h3>
-      <p>Your order should be open in your email or WhatsApp app. Hit send and I'll reply with payment details.</p>
-      <p class="muted small">Nothing opened? Send the details to <a data-contact-email></a>.</p>
+      <h3>Thanks, order received</h3>
+      <p>I'll email you shortly to confirm and send payment details. Your pair is reserved once payment is in.</p>
       <button class="btn btn-primary btn-block" type="button" data-finish>Done</button>
     </div>
   </aside>
