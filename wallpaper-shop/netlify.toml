@@ -1,0 +1,5 @@
+# Netlify deploys this folder as-is; there is no build step.
+# The Netlify project must have its base directory set to wallpaper-shop (see README),
+# so Netlify reads this file instead of the netlify.toml at the repository root.
+[build]
+  publish = "."

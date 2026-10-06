@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Luxe MacBook wallpapers</title>
+  <meta name="description" content="Luxe wallpapers voor je MacBook: marmer, zijde, fluweel en goud, in de exacte resolutie van jouw scherm.">
+  <meta name="theme-color" content="#0c0b0a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top" data-bind="name">Shop</a>
+      <nav class="nav" aria-label="Hoofdmenu">
+        <a href="#collectie">Collectie</a>
+        <a href="#werkwijze">Zo werkt het</a>
+        <a href="#vragen">Vragen</a>
+      </nav>
+      <button class="bag-button" type="button" aria-controls="bag" aria-expanded="false" data-open-bag>
+        Winkelmand <span class="bag-count" data-bag-count>0</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Digitale wallpapers &middot; Direct per e-mail</p>
+          <h1 data-bind="headline"></h1>
+          <p class="lede" data-bind="tagline"></p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#collectie">Bekijk de collectie</a>
+            <span class="hero-price" data-hero-price></span>
+          </div>
+        </div>
+        <figure class="hero-art">
+          <div class="macbook">
+            <div class="macbook-screen" data-hero-screen></div>
+            <div class="macbook-base"></div>
+          </div>
+          <figcaption class="hero-caption" data-hero-caption aria-live="polite"></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="collectie" aria-labelledby="collectie-title">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="collectie-title">De collectie</h2>
+          <p class="muted" data-collection-summary></p>
+        </div>
+        <div data-bundle></div>
+        <div class="product-grid" data-products></div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="werkwijze" aria-labelledby="werkwijze-title">
+      <div class="wrap split">
+        <div>
+          <h2 id="werkwijze-title">Zo werkt het</h2>
+          <ol class="steps" data-steps></ol>
+        </div>
+        <div>
+          <h2>Wat je krijgt</h2>
+          <ul class="detail-list" data-details></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="vragen" aria-labelledby="vragen-title">
+      <div class="wrap narrow">
+        <h2 id="vragen-title">Veelgestelde vragen</h2>
+        <div class="faq" data-faq></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div>
+        <strong class="footer-brand" data-bind="name"></strong>
+        <p class="muted small" data-bind="disclaimer"></p>
+      </div>
+      <div class="footer-contact" data-contact></div>
+    </div>
+  </footer>
+
+  <div class="scrim" data-close-bag hidden></div>
+  <aside class="bag" id="bag" role="dialog" aria-modal="true" aria-labelledby="bag-title" hidden>
+    <div class="bag-head">
+      <h2 id="bag-title">Winkelmand</h2>
+      <button class="icon-btn" type="button" aria-label="Winkelmand sluiten" data-close-bag>&times;</button>
+    </div>
+
+    <div class="bag-body" data-bag-view="items">
+      <div data-bag-items></div>
+      <p class="bag-empty muted" data-bag-empty>Je winkelmand is leeg.</p>
+
+      <form class="checkout" name="order" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-checkout novalidate>
+        <input type="hidden" name="form-name" value="order">
+        <input type="hidden" name="order">
+        <input type="hidden" name="total">
+        <p hidden><label>Laat dit leeg: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+
+        <div class="totals">
+          <div class="total"><span>Totaal</span><span data-total></span></div>
+        </div>
+
+        <label class="field">
+          <span>Naam</span>
+          <input name="name" autocomplete="name" required>
+        </label>
+        <label class="field">
+          <span>E-mailadres</span>
+          <input name="email" type="email" autocomplete="email" required>
+        </label>
+        <label class="field">
+          <span>Welke MacBook heb je?</span>
+          <select name="model" data-models required>
+            <option value="">Kies je model</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Opmerking <em>(optioneel)</em></span>
+          <textarea name="note" rows="2" placeholder="Bijvoorbeeld een extra monitor"></textarea>
+        </label>
+
+        <p class="form-error" data-form-error role="alert"></p>
+
+        <button class="btn btn-primary btn-block" type="submit" data-submit>Bestelling plaatsen</button>
+        <p class="muted small">Je betaalt nu nog niets. Je krijgt binnen 24 uur een betaalverzoek per e-mail en na betaling de downloadlink.</p>
+      </form>
+    </div>
+
+    <div class="bag-body bag-done" data-bag-view="done" hidden>
+      <p class="done-mark" aria-hidden="true">&check;</p>
+      <h3>Bedankt, je bestelling is binnen</h3>
+      <p>Je krijgt binnen 24 uur een betaalverzoek per e-mail. Na betaling sturen we je de downloadlink.</p>
+      <button class="btn btn-primary btn-block" type="button" data-finish>Klaar</button>
+    </div>
+  </aside>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
